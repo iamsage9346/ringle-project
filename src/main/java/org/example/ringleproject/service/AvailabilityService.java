@@ -10,7 +10,7 @@ import org.example.ringleproject.dto.AvailabilitySlotByDateResponse;
 import org.example.ringleproject.dto.AvailabilitySlotByTimeResponse;
 import org.example.ringleproject.repository.AvailabilityRepository;
 import org.example.ringleproject.repository.TutorRepository;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -141,7 +141,7 @@ public class AvailabilityService {
 
         return result;
     }
-//
+
 //    @Scheduled(cron = "0 0 3 * * *")
 //    public void deleteExpiredAvailability() {
 //        LocalDateTime now = LocalDateTime.now();

@@ -12,4 +12,11 @@ public class LessonRequest {
     private Long studentId;
     private LocalDateTime startTime;
     private LessonDuration lessonDuration;
+
+    public LessonRequest(Long studentId, Long tutorId, LocalDateTime start, LessonDuration lessonDuration) {
+        this.studentId = studentId;
+        this.tutorId = tutorId;
+        this.startTime = start;
+        this.lessonDuration = lessonDuration;
+    }
 }

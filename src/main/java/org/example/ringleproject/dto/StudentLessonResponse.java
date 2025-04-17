@@ -1,11 +1,13 @@
 package org.example.ringleproject.dto;
 
 
+import lombok.Getter;
 import org.example.ringleproject.domain.Lesson;
 import org.example.ringleproject.domain.LessonDuration;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class StudentLessonResponse {
     private Long lessonId;
     private String tutorName;

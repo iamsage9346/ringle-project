@@ -23,4 +23,8 @@ public class Tutor {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    public Tutor(String name) {
+        this.name = name;
+    }
 }

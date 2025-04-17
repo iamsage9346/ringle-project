@@ -1,5 +1,6 @@
 package org.example.ringleproject.dto;
 
+import lombok.Getter;
 import org.aspectj.weaver.patterns.ConcreteCflowPointcut;
 import org.example.ringleproject.domain.Availability;
 import org.example.ringleproject.domain.LessonDuration;
@@ -7,6 +8,7 @@ import org.example.ringleproject.domain.LessonDuration;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Getter
 public class AvailabilitySlotByTimeResponse {
     private Long tutorId;
     private String tutorName;
@@ -29,4 +31,5 @@ public class AvailabilitySlotByTimeResponse {
             this.lessonDuration = null;
         }
     }
+
 }

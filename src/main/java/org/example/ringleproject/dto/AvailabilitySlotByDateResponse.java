@@ -1,7 +1,10 @@
 package org.example.ringleproject.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class AvailabilitySlotByDateResponse {
     private Long tutorId;
     private LocalDateTime startTime;
@@ -12,4 +15,5 @@ public class AvailabilitySlotByDateResponse {
         this.startTime = startTime;
         this.duration = duration;
     }
+
 }

@@ -6,6 +6,7 @@ import org.example.ringleproject.domain.LessonDuration;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class LessonResponse {
     private Long studentId;
     private Long tutorId;
@@ -18,5 +19,4 @@ public class LessonResponse {
         this.startTime = lesson.getStartTime();
         this.lessonDuration = lesson.getLessonDuration();
     }
-
 }

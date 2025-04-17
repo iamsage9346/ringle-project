@@ -11,4 +11,10 @@ public class AvailabilityRequest {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    public AvailabilityRequest(Long tutorId, LocalDateTime startTime, LocalDateTime endTime) {
+        this.tutorId = tutorId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
 }

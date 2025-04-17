@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.ringleproject.domain.Availability;
 import org.example.ringleproject.domain.Lesson;
+import org.example.ringleproject.domain.LessonAvailability;
 import org.example.ringleproject.domain.LessonDuration;
 import org.example.ringleproject.domain.Student;
 import org.example.ringleproject.domain.Tutor;
@@ -11,12 +12,14 @@ import org.example.ringleproject.dto.LessonRequest;
 import org.example.ringleproject.dto.LessonResponse;
 import org.example.ringleproject.dto.StudentLessonResponse;
 import org.example.ringleproject.repository.AvailabilityRepository;
+import org.example.ringleproject.repository.LessonAvailabilityRepository;
 import org.example.ringleproject.repository.LessonRepository;
 import org.example.ringleproject.repository.StudentRepository;
 import org.example.ringleproject.repository.TutorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,6 +30,7 @@ public class LessonService {
     private final AvailabilityRepository availabilityRepository;
     private final StudentRepository studentRepository;
     private final TutorRepository tutorRepository;
+    private final LessonAvailabilityRepository lessonAvailabilityRepository;
 
     @Transactional
     public LessonResponse createLesson(LessonRequest lessonRequest) {
@@ -64,6 +68,18 @@ public class LessonService {
                 .build();
 
         lessonRepository.save(lesson);
+
+        List<LessonAvailability> links = new ArrayList<>();
+        for (int i = 0; i < requiredSlots; i++) {
+            LocalDateTime time = startTime.plusMinutes(30L * i);
+            Availability slot = availabilityRepository.findByTutorIdAndStartTime(tutor.getId(), time);
+
+            // 연결 엔티티 생성
+            LessonAvailability link = new LessonAvailability(lesson, slot);
+            links.add(link);
+        }
+
+        lessonAvailabilityRepository.saveAll(links);
 
         return new LessonResponse(lesson);
     }

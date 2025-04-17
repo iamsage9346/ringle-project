@@ -27,4 +27,8 @@ public class Student {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
 }

@@ -28,4 +28,9 @@ public class LessonAvailability {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "availability_id")
     private Availability availability;
+
+    public LessonAvailability(Lesson lesson, Availability availability) {
+        this.lesson = lesson;
+        this.availability = availability;
+    }
 }
