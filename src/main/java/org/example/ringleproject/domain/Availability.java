@@ -1,5 +1,6 @@
 package org.example.ringleproject.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,8 @@ public class Availability {
 
     private LocalDateTime endTime;
 
-    private boolean isBooked;
+    @Column(name = "booked")
+    private boolean booked;
 
     @Builder
     public Availability(Tutor tutor, LocalDateTime startTime, LocalDateTime endTime) {

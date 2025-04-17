@@ -70,7 +70,7 @@ class LessonServiceTest {
 
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.of(tutor));
-        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(eq(tutorId), any(), eq(false)))
+        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(eq(tutorId), any()))
                 .thenReturn(true);
         when(availabilityRepository.findByTutorIdAndStartTime(eq(tutorId), any()))
                 .thenReturn(slot1, slot2);
@@ -112,7 +112,7 @@ class LessonServiceTest {
 
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.of(tutor));
-        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutorId, start, false)).thenReturn(true);
+        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutorId, start)).thenReturn(true);
         when(availabilityRepository.findByTutorIdAndStartTime(tutorId, start)).thenReturn(slot);
 
         // when
@@ -169,7 +169,7 @@ class LessonServiceTest {
 
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.of(tutor));
-        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(eq(tutorId), any(), eq(false)))
+        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(eq(tutorId), any()))
                 .thenReturn(true, false);
 
         assertThatThrownBy(() -> lessonService.createLesson(request))

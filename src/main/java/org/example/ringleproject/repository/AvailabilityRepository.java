@@ -15,13 +15,13 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
 
     Availability findByTutorIdAndStartTime(Long tutorId, LocalDateTime startTime);
 
-    @Query("SELECT a FROM Availability a JOIN FETCH a.tutor WHERE a.startTime BETWEEN :start AND :end AND a.isBooked = false")
+    @Query("SELECT a FROM Availability a JOIN FETCH a.tutor WHERE a.startTime BETWEEN :start AND :end AND a.booked = false")
     List<Availability> findAvailableWithTutor(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT a FROM Availability a JOIN FETCH a.tutor WHERE a.startTime = :startTime AND a.isBooked = false")
+    @Query("SELECT a FROM Availability a JOIN FETCH a.tutor WHERE a.startTime = :startTime AND a.booked = false")
     List<Availability> findByStartTimeAndBookedIsFalseWithTutor(@Param("startTime") LocalDateTime startTime);
 
-    boolean existsByTutorIdAndStartTimeAndBookedIsFalse(Long id, LocalDateTime nextTime, boolean b);
+    boolean existsByTutorIdAndStartTimeAndBookedIsFalse(Long id, LocalDateTime nextTime);
 
     void deleteByStartTimeBeforeAndBookedFalse(LocalDateTime now);
 

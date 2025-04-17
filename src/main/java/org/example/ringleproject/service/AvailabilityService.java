@@ -127,7 +127,7 @@ public class AvailabilityService {
 
             for (int i = 1; i < requiredSlotCount; i++) {
                 nextTime = nextTime.plusMinutes(30);
-                boolean exists = availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), nextTime, false);
+                boolean exists = availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), nextTime);
                 if (!exists) {
                     isValid = false;
                     break;

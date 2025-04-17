@@ -173,7 +173,7 @@ class AvailabilityServiceTest {
 
         when(availabilityRepository.findByStartTimeAndBookedIsFalseWithTutor(base))
                 .thenReturn(Collections.singletonList(a1));
-        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30), false))
+        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30)))
                 .thenReturn(true);
 
         List<AvailabilitySlotByTimeResponse> result = availabilityService.searchByTimeAvailableSlots(base, 60);
@@ -192,7 +192,7 @@ class AvailabilityServiceTest {
 
         when(availabilityRepository.findByStartTimeAndBookedIsFalseWithTutor(base))
                 .thenReturn(Collections.singletonList(a1));
-        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30), false))
+        when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30)))
                 .thenReturn(false);
 
         List<AvailabilitySlotByTimeResponse> result = availabilityService.searchByTimeAvailableSlots(base, 60);

@@ -48,7 +48,7 @@ public class LessonService {
 
         for (int i = 0; i < requiredSlots; i++) {
             LocalDateTime time = startTime.plusMinutes(30L * i);
-            boolean available = availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), time, false);
+            boolean available = availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), time);
             if (!available) {
                 throw new IllegalArgumentException("Tutor is not available at this time");
             }
