@@ -30,11 +30,13 @@ public class Availability {
     @JoinColumn(name = "tutor_id", nullable = false)
     private Tutor tutor;
 
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
+    @Column(nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "booked")
+    @Column(name = "booked", nullable = false)
     private boolean booked;
 
     @Builder
