@@ -19,4 +19,6 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
     List<Availability> findByStartTimeAndBookedIsFalseWithTutor(@Param("startTime") LocalDateTime startTime);
 
     boolean existsByTutorIdAndStartTimeAndBookedIsFalse(Long id, LocalDateTime nextTime, boolean b);
+    void deleteByStartTimeBeforeAndBookedFalse(LocalDateTime now);
+
 }
