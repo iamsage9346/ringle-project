@@ -1,16 +1,11 @@
 package org.example.ringleproject.domain;
 
-import jakarta.persistence.JoinColumn;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 public class LessonAvailabilityId implements Serializable {
 
-    @JoinColumn(name = "lesson")
     private Long lesson;
-
-    @JoinColumn(name = "availability")
     private Long availability;
 
     public LessonAvailabilityId() {}
@@ -18,5 +13,19 @@ public class LessonAvailabilityId implements Serializable {
     public LessonAvailabilityId(Long lesson, Long availability) {
         this.lesson = lesson;
         this.availability = availability;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LessonAvailabilityId)) return false;
+        LessonAvailabilityId that = (LessonAvailabilityId) o;
+        return Objects.equals(lesson, that.lesson) &&
+                Objects.equals(availability, that.availability);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lesson, availability);
     }
 }

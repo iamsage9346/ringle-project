@@ -131,12 +131,14 @@ class LessonServiceTest {
 
     @Test
     void createLesson_fail_ifStudentNotFound() {
+        // given
         Long studentId = 1L;
         Long tutorId = 2L;
         LessonRequest request = new LessonRequest(studentId, tutorId, LocalDateTime.now(), LessonDuration.MIN30);
 
         when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
 
+        // when, then
         assertThatThrownBy(() -> lessonService.createLesson(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Student not found");
@@ -144,6 +146,7 @@ class LessonServiceTest {
 
     @Test
     void createLesson_fail_ifTutorNotFound() {
+        // given
         Long studentId = 1L;
         Long tutorId = 2L;
         Student student = new Student("Jay"); student.setId(studentId);
@@ -152,6 +155,7 @@ class LessonServiceTest {
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.empty());
 
+        // when, then
         assertThatThrownBy(() -> lessonService.createLesson(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Tutor not found");
@@ -159,6 +163,7 @@ class LessonServiceTest {
 
     @Test
     void createLesson_fail_ifAvailabilityMissing() {
+        // given
         Long studentId = 1L;
         Long tutorId = 2L;
         LocalDateTime start = LocalDateTime.of(2025, 4, 20, 10, 0);
@@ -172,6 +177,7 @@ class LessonServiceTest {
         when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(eq(tutorId), any()))
                 .thenReturn(true, false);
 
+        // when, then
         assertThatThrownBy(() -> lessonService.createLesson(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Tutor is not available at this time");

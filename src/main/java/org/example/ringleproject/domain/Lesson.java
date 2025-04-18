@@ -1,5 +1,6 @@
 package org.example.ringleproject.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +35,7 @@ public class Lesson {
 
     private LocalDateTime startTime;
 
+    @Column(nullable = false, name = "duration")
     private LessonDuration lessonDuration;
 
     @Builder

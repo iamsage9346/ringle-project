@@ -81,7 +81,8 @@ public class LessonService {
             links.add(link);
         }
 
-        lessonAvailabilityRepository.saveAll(links);
+        lessonRepository.saveAndFlush(lesson);
+
 
         return new LessonResponse(lesson);
     }

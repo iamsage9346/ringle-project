@@ -29,6 +29,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AvailabilityServiceTest {
 
+
     @InjectMocks
     private AvailabilityService availabilityService;
 
@@ -40,6 +41,7 @@ class AvailabilityServiceTest {
 
     @Test
     void openAvailability_success() {
+        // given
         Long tutorId = 1L;
         LocalDateTime start = LocalDateTime.of(2025, 4, 18, 10, 0);
         LocalDateTime end = start.plusMinutes(30);
@@ -49,8 +51,10 @@ class AvailabilityServiceTest {
         tutor.setId(tutorId);
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.of(tutor));
 
+        // when
         AvailabilityResponse response = availabilityService.openAvailability(request);
 
+        // then
         assertThat(response.getTutorId()).isEqualTo(tutorId);
         assertThat(response.getStartTime()).isEqualTo(start);
         verify(availabilityRepository).save(any());
@@ -58,12 +62,14 @@ class AvailabilityServiceTest {
 
     @Test
     void openAvailability_startTime_error() {
+        // given
         AvailabilityRequest request = new AvailabilityRequest(
                 1L,
                 LocalDateTime.of(2025, 4, 18, 10, 15),
                 LocalDateTime.of(2025, 4, 18, 10, 45)
         );
 
+        // when, then
         assertThatThrownBy(() -> availabilityService.openAvailability(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Start time must be on the hour or half-hour.");
@@ -71,12 +77,14 @@ class AvailabilityServiceTest {
 
     @Test
     void openAvailability_endTime_error() {
+        // given
         AvailabilityRequest request = new AvailabilityRequest(
                 1L,
                 LocalDateTime.of(2025, 4, 18, 10, 0),
                 LocalDateTime.of(2025, 4, 18, 10, 45)
         );
 
+        // when, then
         assertThatThrownBy(() -> availabilityService.openAvailability(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Lesson must be exactly 30 minutes.");
@@ -84,6 +92,7 @@ class AvailabilityServiceTest {
 
     @Test
     void openAvailability_notExistTutor() {
+        // given
         Long tutorId = 99L;
         LocalDateTime start = LocalDateTime.of(2025, 4, 18, 11, 0);
         LocalDateTime end = start.plusMinutes(30);
@@ -91,6 +100,7 @@ class AvailabilityServiceTest {
 
         when(tutorRepository.findById(tutorId)).thenReturn(Optional.empty());
 
+        // when, then
         assertThatThrownBy(() -> availabilityService.openAvailability(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Tutor does not exist.");
@@ -98,6 +108,7 @@ class AvailabilityServiceTest {
 
     @Test
     void deleteAvailability_success() {
+        // given
         Long tutorId = 1L;
         LocalDateTime startTime = LocalDateTime.of(2025, 4, 19, 10, 0);
 
@@ -107,18 +118,22 @@ class AvailabilityServiceTest {
         when(availabilityRepository.existsByTutorIdAndStartTime(tutorId, startTime)).thenReturn(true);
         when(availabilityRepository.findByTutorIdAndStartTime(tutorId, startTime)).thenReturn(availability);
 
+        // when
         availabilityService.deleteAvailability(tutorId, startTime);
 
+        // then
         verify(availabilityRepository).deleteById(100L);
     }
 
     @Test
     void deleteAvailability_fail_if_not_exist() {
+        // given
         Long tutorId = 2L;
         LocalDateTime startTime = LocalDateTime.of(2025, 4, 19, 12, 30);
 
         when(availabilityRepository.existsByTutorIdAndStartTime(tutorId, startTime)).thenReturn(false);
 
+        // when, then
         assertThatThrownBy(() -> availabilityService.deleteAvailability(tutorId, startTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The class available time zone does not exist.");
@@ -127,6 +142,7 @@ class AvailabilityServiceTest {
 
     @Test
     void searchByDateAvailableSlots_success() {
+        // given
         Tutor tutor = new Tutor("Amy");
         tutor.setId(1L);
 
@@ -138,8 +154,10 @@ class AvailabilityServiceTest {
         when(availabilityRepository.findAvailableWithTutor(t1.toLocalDate().atStartOfDay(), t1.toLocalDate().plusDays(1).atStartOfDay()))
                 .thenReturn(Arrays.asList(a1, a2));
 
+        // when
         List<AvailabilitySlotByDateResponse> result = availabilityService.searchByDateAvailableSlots(t1.toLocalDate(), t1.toLocalDate(), 60);
 
+        // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getStartTime()).isEqualTo(t1);
         assertThat(result.get(0).getTutorId()).isEqualTo(tutor.getId());
@@ -147,6 +165,7 @@ class AvailabilityServiceTest {
 
     @Test
     void searchByDateAvailableSlots_ignoreNonContinuousSlots() {
+        // given
         Tutor tutor = new Tutor("Amy");
         tutor.setId(1L);
 
@@ -158,13 +177,16 @@ class AvailabilityServiceTest {
         when(availabilityRepository.findAvailableWithTutor(t1.toLocalDate().atStartOfDay(), t1.toLocalDate().plusDays(1).atStartOfDay()))
                 .thenReturn(Arrays.asList(a1, a2));
 
+        // when
         List<AvailabilitySlotByDateResponse> result = availabilityService.searchByDateAvailableSlots(t1.toLocalDate(), t1.toLocalDate(), 60);
 
+        // then
         assertThat(result).isEmpty();
     }
 
     @Test
     void searchByTimeAvailableSlots_success() {
+        // given
         Tutor tutor = new Tutor("Ben");
         tutor.setId(2L);
 
@@ -176,14 +198,17 @@ class AvailabilityServiceTest {
         when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30)))
                 .thenReturn(true);
 
+        // when
         List<AvailabilitySlotByTimeResponse> result = availabilityService.searchByTimeAvailableSlots(base, 60);
 
+        // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTutorId()).isEqualTo(tutor.getId());
     }
 
     @Test
     void searchByTimeAvailableSlots_ignorePartialAvailability() {
+        // given
         Tutor tutor = new Tutor("Ben");
         tutor.setId(2L);
 
@@ -195,8 +220,10 @@ class AvailabilityServiceTest {
         when(availabilityRepository.existsByTutorIdAndStartTimeAndBookedIsFalse(tutor.getId(), base.plusMinutes(30)))
                 .thenReturn(false);
 
+        // when
         List<AvailabilitySlotByTimeResponse> result = availabilityService.searchByTimeAvailableSlots(base, 60);
 
+        // then
         assertThat(result).isEmpty();
     }
 }
