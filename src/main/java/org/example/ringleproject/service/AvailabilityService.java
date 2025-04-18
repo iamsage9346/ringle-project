@@ -142,7 +142,7 @@ public class AvailabilityService {
         return result;
     }
 
-//    @Scheduled(cron = "0 0 3 * * *")
+//    @Scheduled(cron = "0 0 0 * * *")
 //    public void deleteExpiredAvailability() {
 //        LocalDateTime now = LocalDateTime.now();
 //        availabilityRepository.deleteByStartTimeBeforeAndBookedFalse(now);

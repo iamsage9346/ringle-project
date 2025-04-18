@@ -61,16 +61,16 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `POST /availability`
-- **RequestBody**: `OpenAvailabilityRequest`
+- **RequestBody**: `AvailabilityRequest`
   - `tutorId`: Long
   - `startTime`: LocalDateTime (정시 또는 반시만 가능)
   - `endTime`: LocalDateTime (startTime + 30분)
 
 - **Response**: `200 OK`
-  - `OpenAvailabilityResponse`
+  - `AvailabilityResponse`
     - `tutorId`: Long
     - `startTime`: LocalDateTime
     - `endTime`: LocalDateTime
@@ -99,7 +99,7 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `DELETE /availability?tutorId={id}&startTime={start}`
 - **Query Parameters**: tutorId, startTime
@@ -108,11 +108,6 @@ spring:
 
 ---
 
-### (4) DB 설계 의도
-
-`availability` 테이블에서 `tutor_id`, `start_time` 조합으로 레코드를 식별해 삭제합니다. 데이터 무결성 유지를 위해 FK 제약 조건이 설정되어 있으며, `booked` 값이 false일 경우에만 삭제됩니다.
-
----
 
 ## 3. searchByDateAvailableSlots()
 
@@ -135,7 +130,7 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `GET /availability/search-by-date`
 - **Query Parameters**:
@@ -144,6 +139,9 @@ spring:
   - `duration` (int, 수업 시간 단위: 분)
 - **Response**: `200 OK`
   - `List<AvailabilitySlotByDateResponse>`
+    - `studentId`: Long
+    - `startTime`: LocalDateTime
+    - `duration`: Enum (`MIN30` or `MIN60`)
 
 ---
 
@@ -166,7 +164,7 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `GET /availability/search-by-time`
 - **Query Parameters**:
@@ -174,6 +172,10 @@ spring:
   - `duration` (int, 수업 시간 단위: 분)
 - **Response**: `200 OK`
   - `List<AvailabilitySlotByTimeResponse>`
+    - `tutorId`: Long
+    - `tutorName`: String
+    - `startTime`: LocalDateTime
+    - `duration`: Enum (`MIN30` or `MIN60`)
 ---
 
 
@@ -200,20 +202,20 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `POST /availability/new-lesson`
 - **Request Body**: `LessonRequest`
-  - `studentId`: Long
   - `tutorId`: Long
-  - `startDateTime`: LocalDateTime
+  - `studentId`: Long
+  - `startTime`: LocalDateTime
   - `lessonDuration`: Enum (`MIN30` or `MIN60`)
 - **Response**: `200 OK`
   - `LessonResponse`
     - `studentId`: Long
     - `tutorId`: Long
     - `startTime`: LocalDateTime
-    - `lessonDuration`: Enum
+    - `lessonDuration`: Enum (`MIN30` or `MIN60`)
 
 ---
 
@@ -236,7 +238,7 @@ spring:
 
 ---
 
-### (3) API 설계 의도
+### (3) API 설명
 
 - **URL**: `GET /availability/my-lesson`
 - **Query Parameters**:
@@ -261,20 +263,18 @@ spring:
 
 ---
 
-###  시스템 아키텍처
-```
-[Client] ---> [Spring Boot Application]
-                   |
-                   |-- Controller Layer (API)
-                   |
-                   |-- Service Layer (Business Logic)
-                   |
-                   |-- Repository Layer (JPA / DB Access)
-                   |
-                   '-- MySQL (Availability, Tutor)
-```
 
 
+## 향후 고려 중인 구조 (비동기 메시지 처리)
+
+현재는 동기 방식으로 수업 예약 API를 처리하고 있으나,  
+실제 운영 환경에서는 여러 사용자가 동시에 동일한 시간대에 예약을 시도할 수 있음을 고려해  
+**Kafka + Redis 기반의 비동기 이벤트 처리 구조**로 확장 가능한 설계를 고려 중입니다.
+
+- Kafka: 수업 예약 요청을 큐에 비동기로 발행하여 병렬 처리 부담을 줄임
+- Redis: 튜터의 특정 시간대에 대해 락을 걸어 중복 예약 방지
+
+---
 
 ## 제출 정보
 - 과제 제출일: 2025-04-18

@@ -1,9 +1,7 @@
 package org.example.ringleproject.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.example.ringleproject.domain.Lesson;
 import org.example.ringleproject.dto.LessonRequest;
 import org.example.ringleproject.dto.LessonResponse;
 import org.example.ringleproject.dto.StudentLessonResponse;
@@ -38,4 +36,5 @@ public class LessonController {
 
         return ResponseEntity.ok(myLessons);
     }
+
 }

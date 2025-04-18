@@ -31,6 +31,8 @@ public class LessonService {
     private final StudentRepository studentRepository;
     private final TutorRepository tutorRepository;
     private final LessonAvailabilityRepository lessonAvailabilityRepository;
+    private final AvailabilityService availabilityService;
+
 
     @Transactional
     public LessonResponse createLesson(LessonRequest lessonRequest) {
@@ -91,5 +93,6 @@ public class LessonService {
                 .map(StudentLessonResponse::new)
                 .toList();
     }
+
 
 }
